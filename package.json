@@ -1,0 +1,17 @@
+{
+  "name": "zero_inveno",
+  "version": "1.0.0",
+  "description": "",
+  "main": "db.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./tailwind.input.css -o ./styles.css --minify",
+    "watch:css": "tailwindcss -i ./tailwind.input.css -o ./styles.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

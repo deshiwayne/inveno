@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inveno</title>
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    /* Hide scrollbar for category menu but keep functionality */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+  </style>
+
+  <!-- Supabase  -->
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+<body class="bg-gray-100 font-sans">
+
+  <header class="bg-white shadow-sm sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex items-center justify-between">
+        
+        <div class="flex items-center space-x-3">
+          <div class="bg-blue-900 text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl flex-shrink-0">
+            <span class="font-"><i class="fa-solid fa-warehouse"></i></span>
+          </div>
+          <div>
+            <h1 class="font-bold text-lg text-gray-800 leading-tight">Inveno</h1>
+            <p class="text-xs text-gray-500">Sylhet City</p>
+          </div>
+        </div>
+
+        <div class="hidden md:flex flex-1 mx-8">
+          <div class="w-full relative">
+            <input type="text"
+              placeholder="Search for products (e.g. Rice, Oil, Vegetables)..."
+              class="w-full border rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button class="absolute right-0 top-0 h-full px-5 bg-blue-900 text-white rounded-r-lg hover:bg-blue-800 transition">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-6 flex-shrink-0">
+          <a href="login.html" class="text-gray-700 hover:text-blue-600 font-medium">Login</a>
+          <button  class="border border-blue-900 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-900 hover:text-white transition font-medium">
+              <a href="seller.html">Become a Seller</a>
+          </button>
+          <div class="relative cursor-pointer hover:text-blue-600">
+            <i class="fa-solid fa-cart-shopping text-xl"></i>
+            <span class="absolute -top-2 -right-3 bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded-full font-bold">2</span>
+          </div>
+        </div>
+
+        <div class="flex md:hidden items-center space-x-5">
+          <div class="relative cursor-pointer">
+            <i class="fa-solid fa-cart-shopping text-xl text-gray-700"></i>
+            <span class="absolute -top-2 -right-2 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">2</span>
+          </div>
+          <button id="mobile-menu-btn" class="text-gray-700 text-2xl focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 md:hidden">
+        <div class="w-full relative">
+          <input type="text"
+            placeholder="Search products..."
+            class="w-full border rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+          <button class="absolute right-0 top-0 h-full px-4 bg-blue-900 text-white rounded-r-lg">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden border-t bg-gray-50 px-4 py-4 space-y-4">
+      <a href="#" class="block text-gray-700 font-medium hover:text-blue-600">Login</a>
+      <button class="w-full border border-blue-900 text-blue-900 px-4 py-2 rounded-lg hover:bg-blue-900 hover:text-white transition font-medium">
+        Become a Seller
+      </button>
+    </div>
+
+    <div class="border-t bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center space-x-6 text-gray-700 text-sm overflow-x-auto scrollbar-hide whitespace-nowrap">
+        <button class="font-semibold flex items-center space-x-2 text-blue-900 flex-shrink-0">
+          <i class="fa-solid fa-bars"></i>
+          <span>Categories</span>
+        </button>
+
+        <a href="#" class="hover:text-blue-600 font-medium">Fruits & Veg</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Rice & Staples</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Dairy & Eggs</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Oil & Spices</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Snacks</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Beverages</a>
+        <a href="#" class="hover:text-blue-600 font-medium">Baby Care</a>
+
+        <div class="md:ml-auto flex-shrink-0">
+          <a href="#" class="text-red-600 font-bold hover:text-red-700"><i class="fa-solid fa-tag mr-1"></i> Special Offers</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative h-[400px] md:h-[500px]">
+    <img src="images/background image.jpg" class="absolute inset-0 w-full h-full object-cover" alt="Hero Background"/>
+    <div class="absolute inset-0 bg-blue-950 bg-opacity-70"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 h-full flex flex-col justify-center text-white">
+      <span class="bg-blue-500 text-xs md:text-sm font-bold px-3 py-1 rounded-md w-fit mb-4 uppercase tracking-wider">
+        New in Sylhet
+      </span>
+
+      <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight max-w-2xl mb-6">
+        Order from your favorite local sellers in Zindabazar, Amberkhana, and more.
+      </h2>
+      <p class="text-lg md:text-xl mb-8 text-gray-200">Get 10% off your first order!</p>
+
+      <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <button class="bg-blue-600 px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition w-full sm:w-auto">
+          Shop Now
+        </button>
+        <!-- <button class="border border-white px-8 py-3 rounded-lg font-bold hover:bg-white hover:text-blue-900 transition w-full sm:w-auto">
+          Become a Seller
+        </button> -->
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-gray-100 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      
+      <div class="flex items-center justify-between mb-8 md:mb-10">
+        <h2 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center space-x-2">
+          <span>Shop by Category</span>
+        </h2>
+        <a href="#" class="text-blue-600 font-medium hover:underline flex items-center">
+          View All <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4 md:gap-6">
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/cat-vegetables.png" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Fruits & Veg</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/cat-rice.png" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Rice & Staples</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/daily egg.avif" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Dairy & Eggs</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/oil and spice.jfif" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Oil & Spices</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/snacks.jfif" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Snacks</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/soda.avif" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Beverages</h3>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition p-4 md:p-6 text-center cursor-pointer">
+          <img src="images/baby care.jfif" class="w-16 h-16 md:w-20 md:h-20 mx-auto rounded-full object-cover mb-3 md:mb-4 border-2 border-gray-50">
+          <h3 class="text-gray-700 font-medium text-sm md:text-base">Baby Care</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-10">
+        <div>
+          <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Featured Products</h2>
+          <p class="text-gray-500 mt-2">Hand-picked fresh items from top sellers</p>
+        </div>
+        <a href="#" class="text-blue-600 font-medium hover:underline mt-4 md:mt-0 hidden sm:block">View All</a>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        
+        <div class="bg-white rounded-2xl shadow-sm border hover:shadow-lg transition overflow-hidden relative group">
+          <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-md z-10">
+            27% OFF
+          </span>
+          <div class="relative overflow-hidden">
+            <img src="images/tomato.avif" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition duration-300" alt="Tomato">
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Fruits & Veg</span>
+              <span class="text-orange-500 text-sm font-semibold"><i class="fa-solid fa-star"></i> 4.8</span>
+            </div>
+            <h3 class="font-bold text-lg text-gray-800 mb-1 leading-tight">Fresh Deshi Tomato (1kg)</h3>
+            <p class="text-xs text-gray-500 mb-4"><i class="fa-solid fa-store mr-1"></i> Sylhet Green Farm • Zindabazar</p>
+            <div class="flex items-end justify-between mt-auto">
+              <div>
+                <p class="text-gray-400 line-through text-xs mb-0.5">৳ 55</p>
+                <p class="text-xl font-bold text-gray-900 leading-none">৳ 40</p>
+              </div>
+              <button class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white h-10 w-10 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border hover:shadow-lg transition overflow-hidden group">
+          <div class="relative overflow-hidden">
+            <img src="images/rice.jfif" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition duration-300" alt="Rice">
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Rice & Staples</span>
+              <span class="text-orange-500 text-sm font-semibold"><i class="fa-solid fa-star"></i> 4.5</span>
+            </div>
+            <h3 class="font-bold text-lg text-gray-800 mb-1 leading-tight">Miniket Rice Premium (5kg)</h3>
+            <p class="text-xs text-gray-500 mb-4"><i class="fa-solid fa-store mr-1"></i> Rahman Grocery • Amberkhana</p>
+            <div class="flex items-end justify-between mt-auto">
+              <div>
+                <p class="text-xl font-bold text-gray-900 leading-none">৳ 350</p>
+              </div>
+              <button class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white h-10 w-10 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border hover:shadow-lg transition overflow-hidden relative group">
+          <span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2.5 py-1 rounded-md z-10">
+            5% OFF
+          </span>
+          <div class="relative overflow-hidden">
+            <img src="images/rupchanda oil.jfif" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition duration-300" alt="Oil">
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Oil & Spices</span>
+              <span class="text-orange-500 text-sm font-semibold"><i class="fa-solid fa-star"></i> 4.9</span>
+            </div>
+            <h3 class="font-bold text-lg text-gray-800 mb-1 leading-tight">Rupchanda Soybean Oil (2L)</h3>
+            <p class="text-xs text-gray-500 mb-4"><i class="fa-solid fa-store mr-1"></i> Bismillah Store • Tilagor</p>
+            <div class="flex items-end justify-between mt-auto">
+              <div>
+                <p class="text-gray-400 line-through text-xs mb-0.5">৳ 400</p>
+                <p class="text-xl font-bold text-gray-900 leading-none">৳ 380</p>
+              </div>
+              <button class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white h-10 w-10 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border hover:shadow-lg transition overflow-hidden group">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f" class="w-full h-48 md:h-56 object-cover group-hover:scale-105 transition duration-300" alt="Eggs">
+          </div>
+          <div class="p-5">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold text-blue-600 uppercase tracking-wider">Dairy & Eggs</span>
+              <span class="text-orange-500 text-sm font-semibold"><i class="fa-solid fa-star"></i> 4.8</span>
+            </div>
+            <h3 class="font-bold text-lg text-gray-800 mb-1 leading-tight">Farm Fresh Eggs (1 Dozen)</h3>
+            <p class="text-xs text-gray-500 mb-4"><i class="fa-solid fa-store mr-1"></i> Sylhet Green Farm • Zindabazar</p>
+            <div class="flex items-end justify-between mt-auto">
+              <div>
+                <p class="text-xl font-bold text-gray-900 leading-none">৳ 140</p>
+              </div>
+              <button class="bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white h-10 w-10 rounded-full flex items-center justify-center transition">
+                <i class="fa-solid fa-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <a href="#" class="block sm:hidden text-center text-blue-600 font-medium hover:underline mt-8 border border-blue-600 rounded-lg py-2">View All Products</a>
+    </div>
+  </section>
+
+  <section class="bg-gray-100 py-12 md:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      
+      <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6 md:mb-8">
+        Best Selling in Sylhet
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div class="bg-[#0b2341] rounded-3xl p-8 md:p-10 text-white flex flex-col justify-center items-start">
+          <h3 class="text-2xl md:text-3xl font-bold mb-3">Premium Tea Leaves</h3>
+          <p class="text-base md:text-lg mb-6 text-gray-300">
+            From Srimangal Tea Gardens. Pure & Natural.
+          </p>
+          <button class="bg-white text-[#0b2341] px-6 py-2.5 rounded-lg font-bold hover:bg-gray-200 transition">
+            Shop Now
+          </button>
+        </div>
+
+        <div class="bg-[#2a4266] rounded-3xl p-8 md:p-10 text-white flex flex-col justify-center items-start">
+          <h3 class="text-2xl md:text-3xl font-bold mb-3">Seasonal Fruits</h3>
+          <p class="text-base md:text-lg mb-6 text-gray-300">
+            Fresh Mangoes from Rajshahi arriving daily.
+          </p>
+          <button class="bg-white text-[#2a4266] px-6 py-2.5 rounded-lg font-bold hover:bg-gray-200 transition">
+            Shop Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-[#0b2341] text-white pt-12 md:pt-16 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
+
+        <div>
+          <h3 class="text-2xl font-bold mb-4">Smart Inventory</h3>
+          <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+            Sylhet's premier online grocery marketplace. Fresh products, local sellers, fast delivery right to your door.
+          </p>
+          <p class="flex items-center text-gray-300 text-sm">
+            <i class="fa-solid fa-location-dot mr-3 text-blue-500"></i>
+            Zindabazar, Sylhet City
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Categories</h4>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white transition">Fruits & Vegetables</a></li>
+            <li><a href="#" class="hover:text-white transition">Rice & Staples</a></li>
+            <li><a href="#" class="hover:text-white transition">Oil & Spices</a></li>
+            <li><a href="#" class="hover:text-white transition">Dairy & Eggs</a></li>
+            <li><a href="#" class="hover:text-white transition">Baby Care</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Customer Care</h4>
+          <ul class="space-y-3 text-sm text-gray-400">
+            <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+            <li><a href="#" class="hover:text-white transition">How to Buy</a></li>
+            <li><a href="#" class="hover:text-white transition">Returns & Refunds</a></li>
+            <li><a href="#" class="hover:text-white transition">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-lg mb-4">Payment Methods</h4>
+          <div class="flex space-x-3 mb-8">
+            <span class="bg-white text-pink-600 px-3 py-1.5 rounded-md font-bold text-xs shadow-sm">bKash</span>
+            <span class="bg-white text-gray-800 px-3 py-1.5 rounded-md font-bold text-xs shadow-sm">Cash</span>
+          </div>
+
+          <h4 class="font-bold text-lg mb-4">Stay Connected</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="w-10 h-10 flex items-center justify-center bg-[#1e3a63] rounded-full hover:bg-blue-600 transition">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="#" class="w-10 h-10 flex items-center justify-center bg-[#1e3a63] rounded-full hover:bg-blue-500 transition">
+              <i class="fa-brands fa-linkedin-in"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-[#1e3a63] mt-12 pt-8 text-center text-gray-400 text-sm md:flex md:justify-between md:text-left">
+        <p>© 2026 Inveno Exchange Sylhet. All rights reserved.</p>
+        <div class="mt-4 md:mt-0 space-x-4">
+          <a href="#" class="hover:text-white transition">Privacy Policy</a>
+          <a href="#" class="hover:text-white transition">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      var menu = document.getElementById('mobile-menu');
+      if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.classList.add('flex');
+      } else {
+        menu.classList.add('hidden');
+        menu.classList.remove('flex');
+      }
+    });
+  </script>
+  <script src="script.js"> </script>
+
+</body>
+ 
+</html>
