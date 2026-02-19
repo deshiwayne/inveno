@@ -34,6 +34,14 @@
           <span class="block sm:inline" id="error-text"></span>
         </div>
 
+        <div id="resend-confirmation" class="hidden bg-blue-50 border border-blue-300 text-blue-800 px-4 py-3 rounded relative mb-4">
+          <p class="text-sm mb-2">Haven't received your confirmation email?</p>
+          <button type="button" onclick="resendConfirmationEmail(document.getElementById('email').value)" 
+            class="text-blue-900 font-semibold hover:underline text-sm">
+            Resend Confirmation Email
+          </button>
+        </div>
+
         <form id="login-form" class="space-y-6">
           <div>
             <label class="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
